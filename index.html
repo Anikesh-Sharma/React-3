@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 300px;
+        text-align: center;
+      }
+      input {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        padding: 10px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        background-color: #007bff;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .remove-btn {
+        background-color: #dc3545;
+      }
+      .remove-btn:hover {
+        background-color: #c82333;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      function App() {
+        const [inputArr, setInputArr] = React.useState(['']);
+
+        function handleChange(e, index) {
+          setInputArr(inputArr.map((val, i) => {
+            if (i === index) {
+              return e.target.value;
+            } else {
+              return val;
+            }
+          }));
+        }
+
+        function handleAdd() {
+          setInputArr([...inputArr, '']);
+        }
+
+        function handleRemove() {
+          if (inputArr.length === 1) {
+            alert("You cannot remove the last input field.");
+            return;
+          }
+          setInputArr(inputArr.slice(0, -1));
+        }
+
+        function handleSubmit(e) {
+          e.preventDefault();
+          console.log(inputArr);
+        }
+
+        return (
+          <div className="container">
+            <form onSubmit={handleSubmit}>
+              {inputArr.map((val, i) => (
+                <div key={i}>
+                  <input
+                    type="text"
+                    placeholder="Enter hobby"
+                    value={val}
+                    onChange={(e) => handleChange(e, i)}
+                  />
+                </div>
+              ))}
+              <div>
+                <button type="button" onClick={handleAdd}>Add+</button>
+                <button type="button" className="remove-btn" onClick={handleRemove}>Remove-</button>
+              </div>
+              <button type="submit">Submit</button>
+            </form>
+          </div>
+        );
+      }
+
+      ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+  </body>
+</html>
